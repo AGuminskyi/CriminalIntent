@@ -5,6 +5,7 @@ import android.app.Dialog;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.DialogFragment;
+import android.view.View;
 
 /**
  * Created by cubru on 27.10.2016.
@@ -18,8 +19,10 @@ public class DatePickerFragment extends DialogFragment {
     @NonNull
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
+        View view = getActivity().getLayoutInflater().inflate(R.layout.dialog_date,null);
         //создает AlertDialog с заголовком и одной кнопкой OK. (
         return new AlertDialog.Builder(getActivity()) // класс AlertDialog.Builder, предоставляющий dинамичный интерфейс для конструирования экземпляров AlertDialog.
+                .setView(view)
                 .setTitle(R.string.date_picker_title)
                 .setPositiveButton(android.R.string.ok, null) //получает строковый ресурс и объект, реализующий DialogInterface.OnClickListener.
                 .create(); //возвращает настроенный экземпляр AlertDialog.
