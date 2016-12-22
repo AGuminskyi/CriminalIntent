@@ -28,6 +28,7 @@ public class CrimeFragment extends Fragment {
 
     public static final String EXTRA_CRIME_ID = "com.android.huminskiy1325.criminalintent.crime_id";
     private static final String DIALOG_DATE = "date";
+    private static final int REQUEST_DATE = 0;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -81,6 +82,7 @@ public class CrimeFragment extends Fragment {
                 android.support.v4.app.FragmentManager fm = getActivity().getSupportFragmentManager();
                // DatePickerFragment dialog = new DatePickerFragment();
                 DatePickerFragment dialog = DatePickerFragment.newInstance(mCrime.getDate());
+                dialog.setTargetFragment(CrimeFragment.this, REQUEST_DATE);
                 dialog.show(fm, DIALOG_DATE);
 
             }

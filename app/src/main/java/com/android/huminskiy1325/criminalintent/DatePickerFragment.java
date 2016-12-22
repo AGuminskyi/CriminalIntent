@@ -2,9 +2,11 @@ package com.android.huminskiy1325.criminalintent;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.DialogFragment;
+import android.support.v4.app.ShareCompat;
 import android.view.View;
 import android.widget.DatePicker;
 
@@ -32,6 +34,16 @@ public class DatePickerFragment extends DialogFragment {
         fragment.setArguments(args);
 
         return fragment;
+    }
+
+    private void sendResult(int resultCode){
+        if(getTargetFragment() == null)
+            return;
+
+        Intent intent = new Intent();
+        intent.putExtra(EXTRA_DATE, mDate);
+
+        getTargetFragment().onActivityResult(getTargetRequestCode(),resultCode,intent);
     }
 
     // в качестве хоста выступает CrimePagerActivity
