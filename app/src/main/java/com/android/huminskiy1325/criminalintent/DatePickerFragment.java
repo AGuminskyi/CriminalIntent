@@ -6,6 +6,11 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.DialogFragment;
 import android.view.View;
+import android.widget.DatePicker;
+
+import java.util.Calendar;
+import java.util.Date;
+import java.util.GregorianCalendar;
 
 /**
  * Created by cubru on 27.10.2016.
@@ -15,11 +20,45 @@ import android.view.View;
 
 
 public class DatePickerFragment extends DialogFragment {
+
+    public static final String EXTRA_DATE = "com.android.huminskiy1325.criminalintent.date";
+
+    private Date mDate;
+
+    public static  DatePickerFragment newInstance(Date date){
+        Bundle args = new Bundle();
+        args.putSerializable(EXTRA_DATE, date);
+        DatePickerFragment fragment = new DatePickerFragment();
+        fragment.setArguments(args);
+
+        return fragment;
+    }
+
     // в качестве хоста выступает CrimePagerActivity
     @NonNull
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
+        mDate = (Date)getArguments().getSerializable(EXTRA_DATE);
+
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(mDate);
+        int year = calendar.get(Calendar.YEAR);
+        int month = calendar.get(Calendar.MONTH);
+        int day = calendar.get(Calendar.DAY_OF_MONTH);
+
         View view = getActivity().getLayoutInflater().inflate(R.layout.dialog_date,null);
+
+        DatePicker datePicker = (DatePicker) view.findViewById(R.id.dialog_datePicker);
+        datePicker.init(year, month, day, new DatePicker.OnDateChangedListener() {
+            @Override
+            public void onDateChanged(DatePicker datePicker, int year, int day, int month) {
+                mDate = new GregorianCalendar(year,month,day).getTime();
+
+                //Обновление аргумента для сохранения
+                //выбранного значения при повороте
+                getArguments().putSerializable(EXTRA_DATE,mDate);
+            }
+        });
         //создает AlertDialog с заголовком и одной кнопкой OK. (
         return new AlertDialog.Builder(getActivity()) // класс AlertDialog.Builder, предоставляющий dинамичный интерфейс для конструирования экземпляров AlertDialog.
                 .setView(view)
