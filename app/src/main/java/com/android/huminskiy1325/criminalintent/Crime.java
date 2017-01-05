@@ -45,7 +45,6 @@ public class Crime {
 
     public void setDate(Date date) {
         mDate = date;
-
     }
 
     @Override

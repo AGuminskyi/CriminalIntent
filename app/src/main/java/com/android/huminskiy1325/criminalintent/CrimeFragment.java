@@ -1,5 +1,7 @@
 package com.android.huminskiy1325.criminalintent;
 
+import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -15,6 +17,7 @@ import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.EditText;
 
+import java.util.Date;
 import java.util.UUID;
 
 /**
@@ -48,6 +51,22 @@ public class CrimeFragment extends Fragment {
         return fragment;
     }
 
+    public void updateDateOnButton(){
+        mDateButton.setText(DateFormat.format("EEEE, LLL d, yyyy", mCrime.getDate()));
+       // mDateButton.setText(mCrime.getDate().toString());
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if(resultCode != Activity.RESULT_OK)
+            return;
+        if(requestCode == REQUEST_DATE){
+            Date date = (Date)data.getSerializableExtra(DatePickerFragment.EXTRA_DATE);
+            mCrime.setDate(date);
+            updateDateOnButton();
+        }
+    }
+
     // @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -73,8 +92,9 @@ public class CrimeFragment extends Fragment {
         });
 
         mDateButton = (Button) v.findViewById(R.id.crime_date);
-        // mDateButton.setText(mCrime.getDate().toString());
+       // updateDateOnButton();
         mDateButton.setText(DateFormat.format("EEEE, LLL d, yyyy", mCrime.getDate()));
+
         //mDateButton.setEnabled(false);
         mDateButton.setOnClickListener(new View.OnClickListener() {
             @Override
