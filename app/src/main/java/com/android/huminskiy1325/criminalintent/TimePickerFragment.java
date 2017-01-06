@@ -1,7 +1,10 @@
 package com.android.huminskiy1325.criminalintent;
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.DialogFragment;
@@ -24,6 +27,7 @@ public class TimePickerFragment extends DialogFragment {
     public static Date mTime;
 
     public static final String EXTRA_TIME = "com.android.huminskiy1325.criminalintent.time";
+    public static final int TIME_RESULT_CODE = 1;
 
     public static TimePickerFragment newInstance(Date data) {
         
@@ -32,6 +36,15 @@ public class TimePickerFragment extends DialogFragment {
         TimePickerFragment fragment = new TimePickerFragment();
         fragment.setArguments(args);
         return fragment;
+    }
+
+    private void sendResult(int resultCode){
+        if(getTargetFragment() == null)
+            return;
+        Intent intent = new Intent();
+        intent.putExtra(EXTRA_TIME, mTime);
+
+        getTargetFragment().onActivityResult(getTargetRequestCode(), resultCode, intent);
     }
 
     @Override
@@ -62,7 +75,12 @@ public class TimePickerFragment extends DialogFragment {
         return new AlertDialog.Builder(getActivity())
                 .setView(v)
                 .setTitle(R.string.time_picker_title)
-                .setPositiveButton(android.R.string.ok, null)
+                .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        sendResult(Activity.RESULT_OK);
+                    }
+                })
                 .create();
     }
 }

@@ -35,6 +35,7 @@ public class CrimeFragment extends Fragment {
     private static final String DIALOG_DATE = "date";
     private static final String DIALOG_TIME = "time";
     private static final int REQUEST_DATE = 0;
+    private static final int REQUST_TIME = 1;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -67,6 +68,12 @@ public class CrimeFragment extends Fragment {
             Date date = (Date)data.getSerializableExtra(DatePickerFragment.EXTRA_DATE);
             mCrime.setDate(date);
             updateDateOnButton();
+        }
+
+        if(requestCode == TimePickerFragment.TIME_RESULT_CODE){
+            Date date = (Date)data.getSerializableExtra(TimePickerFragment.EXTRA_TIME);
+            mCrime.setDate(date);
+            mTimeButton.setText(DateFormat.format("HH:mm", mCrime.getDate()));
         }
     }
 
@@ -118,6 +125,7 @@ public class CrimeFragment extends Fragment {
             public void onClick(View v) {
                 FragmentManager fm = getActivity().getSupportFragmentManager();
                 TimePickerFragment timeDialog = TimePickerFragment.newInstance(mCrime.getDate());
+                timeDialog.setTargetFragment(CrimeFragment.this, REQUST_TIME);
                 timeDialog.show(fm, DIALOG_TIME);
             }
         });
