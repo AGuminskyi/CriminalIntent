@@ -9,6 +9,7 @@ import android.text.format.DateFormat;
 import android.view.View;
 import android.widget.TimePicker;
 
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 
@@ -36,11 +37,28 @@ public class TimePickerFragment extends DialogFragment {
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         mTime = (Date)getArguments().getSerializable(EXTRA_TIME);
-        //Calendar calendar = Calendar.getInstance();
-        //calendar.setTime(mTime);
-        //DateFormat dateFormat = DateFormat.getTimeFormat(getDialog());
+        final Calendar calendar = Calendar.getInstance();
+        calendar.setTime(mTime);
+//        int hour = calendar.get(Calendar.HOUR);
+//        int minute = calendar.get(Calendar.MINUTE);
 
         View v = getActivity().getLayoutInflater().inflate(R.layout.dialog_time,null);
+
+        TimePicker timePicker = (TimePicker)v.findViewById(R.id.dialog_timePicker);
+        timePicker.setIs24HourView(true);
+        timePicker.setOnTimeChangedListener(new TimePicker.OnTimeChangedListener() {
+            @Override
+            public void onTimeChanged(TimePicker view, int hourOfDay, int minute) {
+                Calendar calendar1 = Calendar.getInstance();
+                calendar1.set(Calendar.HOUR_OF_DAY, hourOfDay);
+                calendar1.set(Calendar.MINUTE, minute);
+
+                mTime = calendar1.getTime();
+
+                getArguments().putSerializable(EXTRA_TIME, mTime);
+            }
+        });
+
         return new AlertDialog.Builder(getActivity())
                 .setView(v)
                 .setTitle(R.string.time_picker_title)

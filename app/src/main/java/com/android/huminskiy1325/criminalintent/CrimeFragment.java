@@ -77,6 +77,7 @@ public class CrimeFragment extends Fragment {
 
         mTitleField = (EditText) v.findViewById(R.id.crime_title);
         mTitleField.setText(mCrime.getTitle());
+        //mTitleField.setText(DateFormat.format("EEEE, LLL d, yyyy", mCrime.getTitle()));
         mTitleField.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
