@@ -1,6 +1,12 @@
 package com.android.huminskiy1325.criminalintent;
 
 
+import android.app.Activity;
+import android.content.Context;
+import android.text.format.DateFormat;
+import android.text.format.DateUtils;
+
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.UUID;
 
@@ -12,7 +18,6 @@ public class Crime {
     private String mTitle;
     private Date mDate;
     private boolean mSolved;
-
 
     Crime(){
         mID = UUID.randomUUID();
@@ -51,5 +56,6 @@ public class Crime {
     public String toString() {
         return mTitle;
     }
+
 }
 

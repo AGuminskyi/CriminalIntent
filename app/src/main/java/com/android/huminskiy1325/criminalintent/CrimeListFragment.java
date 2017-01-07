@@ -1,10 +1,12 @@
 package com.android.huminskiy1325.criminalintent;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.ListFragment;
+import android.text.format.DateFormat;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,6 +25,13 @@ public class CrimeListFragment extends ListFragment {
     private ArrayList<Crime> mCrimes;
     private static final String TAG = "CrimeListFragment";
     private static final int REQUEST_CRIME = 1;
+
+//    private DateFormat dateFormat;
+//    private DateFormat timeFormat;
+//
+//    private String toDateFormat(){
+//        dateFormat = android.text.format.DateFormat.getDateFormat(getContext())
+//    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -93,4 +102,5 @@ public class CrimeListFragment extends ListFragment {
             return convertView;
         }
     }
+
 }

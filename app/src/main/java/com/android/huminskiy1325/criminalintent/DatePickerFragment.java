@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.ShareCompat;
+import android.text.format.DateFormat;
 import android.view.View;
 import android.widget.DatePicker;
 
@@ -53,7 +54,6 @@ public class DatePickerFragment extends DialogFragment {
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         mDate = (Date)getArguments().getSerializable(EXTRA_DATE);
-
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(mDate);
         int year = calendar.get(Calendar.YEAR);
