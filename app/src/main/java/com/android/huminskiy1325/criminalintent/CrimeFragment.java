@@ -1,16 +1,20 @@
 package com.android.huminskiy1325.criminalintent;
 
+import android.annotation.TargetApi;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
+import android.support.v4.app.NavUtils;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.text.format.DateFormat;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -49,6 +53,8 @@ public class CrimeFragment extends Fragment {
         UUID crimeId = (UUID) getArguments().getSerializable(EXTRA_CRIME_ID);
 
         mCrime = CrimeLab.get(getActivity()).getCrime(crimeId);
+
+        setHasOptionsMenu(true);
     }
 
     public static CrimeFragment newInstance(UUID cimeId) {
@@ -59,42 +65,40 @@ public class CrimeFragment extends Fragment {
         return fragment;
     }
 
-    public void updateDateOnButton(){
+    public void updateDateOnButton() {
         mDateButton.setText(DateFormat.format("EEEE, LLL d, yyyy", mCrime.getDate()));
-       // mDateButton.setText(mCrime.getDate().toString());
+        // mDateButton.setText(mCrime.getDate().toString());
     }
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if(resultCode != Activity.RESULT_OK)
+        if (resultCode != Activity.RESULT_OK)
             return;
 
-        if(requestCode == REQUEST_DATE){
-            Date date = (Date)data.getSerializableExtra(DatePickerFragment.EXTRA_DATE);
+        if (requestCode == REQUEST_DATE) {
+            Date date = (Date) data.getSerializableExtra(DatePickerFragment.EXTRA_DATE);
             mCrime.setDate(date);
             updateDateOnButton();
         }
 
-        if(requestCode == TimePickerFragment.TIME_RESULT_CODE){
-            Date date = (Date)data.getSerializableExtra(TimePickerFragment.EXTRA_TIME);
+        if (requestCode == TimePickerFragment.TIME_RESULT_CODE) {
+            Date date = (Date) data.getSerializableExtra(TimePickerFragment.EXTRA_TIME);
             mCrime.setDate(date);
             mTimeButton.setText(DateFormat.format("HH:mm", mCrime.getDate()));
         }
 
-        if(requestCode == REQUEST_CHOISE){
+        if (requestCode == REQUEST_CHOISE) {
             int choise = data.getIntExtra(ChoiceDialogFragment.EXTRA_CHOISE, 0);
-            if(choise == 0)
+            if (choise == 0)
                 return;
-            if(choise == 1)
-            {
+            if (choise == 1) {
                 android.support.v4.app.FragmentManager fm = getActivity().getSupportFragmentManager();
                 // DatePickerFragment dialog = new DatePickerFragment();
                 DatePickerFragment dialog = DatePickerFragment.newInstance(mCrime.getDate());
                 dialog.setTargetFragment(CrimeFragment.this, REQUEST_DATE);
                 dialog.show(fm, DIALOG_DATE);
             }
-            if (choise == 2)
-            {
+            if (choise == 2) {
                 FragmentManager fm = getActivity().getSupportFragmentManager();
                 TimePickerFragment timeDialog = TimePickerFragment.newInstance(mCrime.getDate());
                 timeDialog.setTargetFragment(CrimeFragment.this, REQUST_TIME);
@@ -103,10 +107,28 @@ public class CrimeFragment extends Fragment {
         }
     }
 
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                if (NavUtils.getParentActivityName(getActivity()) != null)
+                    NavUtils.navigateUpFromSameTask(getActivity());
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
+
     // @Nullable
+    @TargetApi(11)
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_crime, container, false);
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
+            if (NavUtils.getParentActivityName(getActivity()) != null)
+                getActivity().getActionBar().setDisplayHomeAsUpEnabled(true);
+        }
 
         mTitleField = (EditText) v.findViewById(R.id.crime_title);
         mTitleField.setText(mCrime.getTitle());
@@ -135,7 +157,7 @@ public class CrimeFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 android.support.v4.app.FragmentManager fm = getActivity().getSupportFragmentManager();
-               // DatePickerFragment dialog = new DatePickerFragment();
+                // DatePickerFragment dialog = new DatePickerFragment();
                 DatePickerFragment dialog = DatePickerFragment.newInstance(mCrime.getDate());
                 dialog.setTargetFragment(CrimeFragment.this, REQUEST_DATE);
                 dialog.show(fm, DIALOG_DATE);
@@ -143,9 +165,9 @@ public class CrimeFragment extends Fragment {
             }
         });
 
-        mTimeButton = (Button)v.findViewById(R.id.crime_time);
+        mTimeButton = (Button) v.findViewById(R.id.crime_time);
         mTimeButton.setText(DateFormat.format("HH:mm", mCrime.getDate()));
-       // mTimeButton.setEnabled(false);
+        // mTimeButton.setEnabled(false);
         mTimeButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -156,7 +178,7 @@ public class CrimeFragment extends Fragment {
             }
         });
 
-        mChoiseButton = (Button)v.findViewById(R.id.choice_button);
+        mChoiseButton = (Button) v.findViewById(R.id.choice_button);
         mChoiseButton.setText(DateFormat.format("EEEE, LLL d, yyyy, HH:mm", mCrime.getDate()));
         mChoiseButton.setOnClickListener(new View.OnClickListener() {
             @Override
