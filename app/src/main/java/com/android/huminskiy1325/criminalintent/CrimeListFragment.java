@@ -15,11 +15,13 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.ListView;
 import android.widget.TextView;
 
 import java.util.ArrayList;
+import java.util.zip.Inflater;
 
 /**
  * Created by cubru on 21.07.2016.
@@ -28,6 +30,7 @@ public class CrimeListFragment extends ListFragment {
 
     private ArrayList<Crime> mCrimes;
     private static final String TAG = "CrimeListFragment";
+    private static Button mNewCrime;
     private static final int REQUEST_CRIME = 1;
     private static boolean mSubtitleVisible;
 
@@ -42,8 +45,8 @@ public class CrimeListFragment extends ListFragment {
         // ArrayAdapter<Crime> adapter = new ArrayAdapter<Crime>(getActivity(), android.R.layout.simple_list_item_1, mCrimes);
         CrimeAdapter adapter = new CrimeAdapter(mCrimes);
         setListAdapter(adapter);  //вспомогательный метод ListFragment, который
-                                 //может использоваться для назначения адаптера объекта ListView, находящегося
-                                //под управлением CrimeListFragment.
+        //может использоваться для назначения адаптера объекта ListView, находящегося
+        //под управлением CrimeListFragment.
         setRetainInstance(true);
         mSubtitleVisible = false;
     }
@@ -52,6 +55,12 @@ public class CrimeListFragment extends ListFragment {
     public void onResume() {
         super.onResume();
         ((CrimeAdapter) getListAdapter()).notifyDataSetChanged();
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        CrimeLab.get(getContext()).saveCrimes();
     }
 
     @Override
@@ -66,7 +75,7 @@ public class CrimeListFragment extends ListFragment {
         super.onCreateOptionsMenu(menu, inflater);
         inflater.inflate(R.menu.fragment_crime_list, menu);
         MenuItem menuItem = menu.findItem(R.id.menu_item_show_subtitle);
-        if(mSubtitleVisible && menuItem != null)
+        if (mSubtitleVisible && menuItem != null)
             menuItem.setTitle(R.string.hide_subtitle);
     }
 
@@ -81,12 +90,11 @@ public class CrimeListFragment extends ListFragment {
                 startActivityForResult(intent, 0);
                 return true;
             case R.id.menu_item_show_subtitle:
-                if(getActivity().getActionBar().getSubtitle() == null){
+                if (getActivity().getActionBar().getSubtitle() == null) {
                     getActivity().getActionBar().setSubtitle(R.string.subtitle);
                     mSubtitleVisible = true;
                     item.setTitle(R.string.hide_subtitle);
-                }
-                else {
+                } else {
                     getActivity().getActionBar().setSubtitle(null);
                     mSubtitleVisible = false;
                     item.setTitle(R.string.show_subtitle);
@@ -97,7 +105,7 @@ public class CrimeListFragment extends ListFragment {
         }
     }
 
-    public void returnResult(){
+    public void returnResult() {
         getActivity().setResult(Activity.RESULT_OK, null);
     }
 
@@ -119,7 +127,7 @@ public class CrimeListFragment extends ListFragment {
         }
 
         @Override
-        public View getView(int position, View convertView, ViewGroup parent){/*В своей реализации getView(…) адаптер создает объект представления по указан-
+        public View getView(int position, View convertView, ViewGroup parent) {/*В своей реализации getView(…) адаптер создает объект представления по указан-
                                                                                ному элементу массива и возвращает этот объект представления объекту ListView.
                                                                                Последний включает объект представления в себя как дочернее представление,
                                                                                 в результате чего новое представление оказывается на экране.*/
@@ -143,7 +151,36 @@ public class CrimeListFragment extends ListFragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = super.onCreateView(inflater, container, savedInstanceState);
+        //View view = super.onCreateView(inflater, container, savedInstanceState);
+
+        View view = getActivity().getLayoutInflater().inflate(R.layout.empty_crime_list_fragment, null);
+        View emptyView = view.findViewById(R.id.empty_view);
+
+        String FirstTag = "FirstTag";
+
+        Log.d(FirstTag, "Before ListView");
+
+        ListView listView = null;
+        listView = (ListView) view.findViewById(android.R.id.list);
+
+        Log.d(FirstTag, "After ListView");
+
+        mNewCrime = (Button) view.findViewById(R.id.btnAddCrime);
+        mNewCrime.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Crime crime = new Crime();
+                CrimeLab.get(getActivity()).addCrime(crime);
+                Intent intent = new Intent(getActivity(), CrimePagerActivity.class);
+                intent.putExtra(CrimeFragment.EXTRA_CRIME_ID, crime.getID());
+                startActivityForResult(intent, 0);
+            }
+        });
+
+        listView.setEmptyView(emptyView);
+
+        Log.d(FirstTag, "After SetEmptyView");
+
         if (mSubtitleVisible)
             getActivity().getActionBar().setSubtitle(R.string.subtitle);
         return view;

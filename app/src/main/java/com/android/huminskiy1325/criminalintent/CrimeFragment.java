@@ -60,8 +60,9 @@ public class CrimeFragment extends Fragment {
     public static CrimeFragment newInstance(UUID cimeId) {
         Bundle args = new Bundle();
         args.putSerializable(EXTRA_CRIME_ID, cimeId);
-        CrimeFragment fragment = new CrimeFragment();//Чтобы присоединить пакет аргументов к фрагменту, вызовите метод Fragment.setArguments(Bundle).
-        fragment.setArguments(args); //Присоединение должно быть выполнено после созданияфрагмента, но до его добавления в активность.
+        CrimeFragment fragment = new CrimeFragment();
+        //Чтобы присоединить пакет аргументов к фрагменту, вызовите метод Fragment.setArguments(Bundle).
+        fragment.setArguments(args);                 //Присоединение должно быть выполнено после созданияфрагмента, но до его добавления в активность.
         return fragment;
     }
 
