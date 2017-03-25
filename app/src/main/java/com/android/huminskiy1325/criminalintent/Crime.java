@@ -23,15 +23,27 @@ public class Crime {
     private static final String JSON_TITLE = "title";
     private static final String JSON_DATE = "date";
     private static final String JSON_SOLVED = "solved";
+    private static final String JSON_PHOTO = "photo";
 
     private UUID mID;
     private String mTitle;
     private Date mDate;
     private boolean mSolved;
+    private Photo mPhoto;
 
     Crime(){
         mID = UUID.randomUUID();
         mDate = new Date();
+    }
+
+    public Crime(JSONObject jsonObject) throws  JSONException{
+        mID = UUID.fromString(jsonObject.getString(JSON_ID));
+        mTitle = jsonObject.getString(JSON_TITLE);
+        mDate = new Date(jsonObject.getLong(JSON_DATE));
+        mSolved = jsonObject.getBoolean(JSON_SOLVED);
+        if(jsonObject.has(JSON_PHOTO)){
+            mPhoto = new Photo(jsonObject.getString(JSON_PHOTO));
+        }
     }
 
     public UUID getID() {
@@ -46,7 +58,7 @@ public class Crime {
         mTitle = title;
     }
 
-    public boolean isSolved() {
+    boolean isSolved() {
         return mSolved;
     }
 
@@ -68,14 +80,18 @@ public class Crime {
         jsonObject.put(JSON_TITLE, mTitle);
         jsonObject.put(JSON_DATE, mDate.getTime());
         jsonObject.put(JSON_SOLVED, mSolved);
+        if(mPhoto != null){
+            jsonObject.put(JSON_PHOTO, mPhoto.toJSON());
+        }
         return jsonObject;
     }
 
-    public Crime(JSONObject jsonObject) throws  JSONException{
-        mID = UUID.fromString(jsonObject.getString(JSON_ID));
-        mTitle = jsonObject.getString(JSON_TITLE);
-        mDate = new Date(jsonObject.getLong(JSON_DATE));
-        mSolved = jsonObject.getBoolean(JSON_SOLVED);
+    public Photo getPhoto(){
+        return mPhoto;
+    }
+
+    public void setPhoto(Photo mPhoto) {
+        this.mPhoto = mPhoto;
     }
 
     @Override

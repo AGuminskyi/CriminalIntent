@@ -14,6 +14,7 @@ public class CrimePagerActivity extends FragmentActivity {
 
     private ViewPager mViewPager;
     private ArrayList<Crime> mCrimes;
+    private CrimeFragment crimeFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,6 +34,7 @@ public class CrimePagerActivity extends FragmentActivity {
 //                использует его идентификатор для создания и возвращения правильно настроен-
 //                        ного экземпляра CrimeFragment.
                 Crime crime = mCrimes.get(position);
+                crimeFragment.newInstance(crime.getID());
                 return CrimeFragment.newInstance(crime.getID());
             }
 
@@ -71,4 +73,10 @@ public class CrimePagerActivity extends FragmentActivity {
 
     }
 
+    @Override
+    public void onBackPressed() {
+        if(crimeFragment.backButtonWasPressed() == true)
+            super.onBackPressed();
+
+    }
 }

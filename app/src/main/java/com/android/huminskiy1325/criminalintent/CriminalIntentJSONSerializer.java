@@ -1,6 +1,8 @@
 package com.android.huminskiy1325.criminalintent;
 
 import android.content.Context;
+import android.os.Environment;
+import android.util.Log;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -39,7 +41,12 @@ public class CriminalIntentJSONSerializer extends Object {
         // write the file to disk
         Writer writer = null;
         try {
-            OutputStream out = mContext.openFileOutput(mFileName, Context.MODE_PRIVATE);
+            OutputStream out = null;
+            if (Environment.getExternalStorageDirectory().equals(Environment.MEDIA_MOUNTED))
+                out = mContext.openFileOutput(Environment.getExternalStorageDirectory().getAbsolutePath() +
+                        "/Android/data/com.android.huminskiy1325.criminalintent/" + mFileName, Context.MODE_PRIVATE);
+            else
+                out = mContext.openFileOutput(mFileName, Context.MODE_PRIVATE);
             writer = new OutputStreamWriter(out);
             writer.write(array.toString());
         } finally {
@@ -52,7 +59,12 @@ public class CriminalIntentJSONSerializer extends Object {
         ArrayList<Crime> crimes = new ArrayList<Crime>();
         BufferedReader reader = null;
         try {
-            InputStream in = mContext.openFileInput(mFileName);
+            InputStream in = null;
+            if (Environment.getExternalStorageDirectory().equals(Environment.MEDIA_MOUNTED))
+                in = mContext.openFileInput(Environment.getExternalStorageDirectory().getAbsolutePath() +
+                        "/Android/data/com.android.huminskiy1325.criminalintent/" + mFileName);
+            else
+                in = mContext.openFileInput(mFileName);
             reader = new BufferedReader(new InputStreamReader(in));
             StringBuilder jsonString = new StringBuilder();
             String line = null;
@@ -65,7 +77,7 @@ public class CriminalIntentJSONSerializer extends Object {
             for (int i = 0; i < array.length(); i++) {
                 crimes.add(new Crime(array.getJSONObject(i)));
             }
-        } catch (FileNotFoundException e) {
+        } catch (FileNotFoundException ignored) {
 
         } finally {
             if (reader != null)

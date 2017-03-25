@@ -24,35 +24,31 @@ public class CrimeLab {
         mSerializer = new CriminalIntentJSONSerializer(mAppContext, FileName);
         try {
             mCrimes = mSerializer.loadCrimes();
-        }catch (Exception e){
+        } catch (Exception e) {
             mCrimes = new ArrayList<Crime>();
-            Log.d(TAG,"Error loading crimes " + e);
-            Toast.makeText(mAppContext,"Error loading crimes", Toast.LENGTH_SHORT);
+            Log.d(TAG, "Error loading crimes " + e);
+            Toast.makeText(mAppContext, "Error loading crimes", Toast.LENGTH_SHORT);
         }
 
-       // mCrimes = new ArrayList<Crime>();
-
-//        for(int i=0; i<100;i++){
-//            Crime crime = new Crime();
-//            crime.setTitle("Crime #" + i);
-//            crime.setSolved(i%2 == 0);
-//                mCrimes.add(crime);
-//            }
     }
 
-    public void addCrime(Crime crime){
+    public void addCrime(Crime crime) {
         mCrimes.add(crime);
     }
 
-    public boolean saveCrimes(){
+    public void deleteCrime(Crime c) {
+        mCrimes.remove(c);
+    }
+
+    public boolean saveCrimes() {
         try {
             mSerializer.saveCrimes(mCrimes);
             Log.d(TAG, "Crimes saves to file");
-            Toast.makeText(mAppContext,"Crimes saves to file", Toast.LENGTH_SHORT);
+            Toast.makeText(mAppContext, "Crimes saves to file", Toast.LENGTH_SHORT);
             return true;
-        }catch (Exception e){
+        } catch (Exception e) {
             Log.e(TAG, "Error saving crimes: " + e);
-            Toast.makeText(mAppContext,"Error saving crimes", Toast.LENGTH_SHORT);
+            Toast.makeText(mAppContext, "Error saving crimes", Toast.LENGTH_SHORT);
             return false;
         }
     }
@@ -68,9 +64,9 @@ public class CrimeLab {
         return mCrimes;
     }
 
-    public Crime getCrime(UUID id){
+    public Crime getCrime(UUID id) {
         for (Crime crime : mCrimes)
-            if(crime.getID().equals(id))
+            if (crime.getID().equals(id))
                 return crime;
 
         return null;

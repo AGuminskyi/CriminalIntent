@@ -10,7 +10,7 @@
     <string name="time_picker_title">Time of crime: </string>
     <string name="choise_dialog_title">Do you want to edit DATE or TIME?</string>
     <string name="choise_dialog_date">Date</string>
-    <string name="choise_dialog_time">Date</string>
+    <string name="choise_dialog_time">Time</string>
 
     <string name="new_crime">New Crime</string>
     <string name="show_subtitle">Show Subtitle</string>
@@ -19,6 +19,9 @@
     <string name="delete_crime">Delete</string>
 
     <string name="no_crimes">No Crimes</string>
-
-
+    <string name="take">TAKE PHOTO</string>
+    <string name="description_info">Info</string>
+    <string name="request_permission">This sample needs camera permission.</string>
+    <string name="camera_error">This device doesn\'t support Camera2 API.</string>
+    <string name="intro_message">Camera info.</string>
 </resources>

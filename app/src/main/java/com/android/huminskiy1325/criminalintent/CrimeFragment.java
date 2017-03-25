@@ -4,6 +4,7 @@ import android.annotation.TargetApi;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.drawable.BitmapDrawable;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -13,7 +14,11 @@ import android.support.v4.app.NavUtils;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.text.format.DateFormat;
+import android.util.Log;
+import android.view.ContextMenu;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,6 +26,9 @@ import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.EditText;
+import android.widget.ImageButton;
+import android.widget.ImageView;
+import android.widget.Toast;
 
 import java.util.Date;
 import java.util.UUID;
@@ -35,10 +43,15 @@ public class CrimeFragment extends Fragment {
     private Button mDateButton;
     private Button mTimeButton;
     private Button mChoiseButton;
+    private ImageButton mPhotoButton;
+    private ImageView mPhotoView;
 
+    private static final int REQUEST_PHOTO = 3;
+    private static final String TAG = "CrimeFragment";
     public static final String EXTRA_CRIME_ID = "com.android.huminskiy1325.criminalintent.crime_id";
     private static final String DIALOG_DATE = "date";
     private static final String DIALOG_TIME = "time";
+    private static final String ALERT_MESSAGE_TITLE = "Please, enter a tittle for the crime";
     private static final int REQUEST_DATE = 0;
     private static final int REQUST_TIME = 1;
     private static final int REQUEST_CHOISE = 2;
@@ -81,13 +94,20 @@ public class CrimeFragment extends Fragment {
             mCrime.setDate(date);
             updateDateOnButton();
         }
+        else if(requestCode == REQUEST_PHOTO){
+            String fileName = data.getStringExtra(CrimeCameraFragment.EXTRA_PHOTO_FILENAME);
+            if (fileName != null){
+                Photo photo = new Photo(fileName);
+                mCrime.setPhoto(photo);
+                showPhoto();
+            }
 
+        }
         if (requestCode == TimePickerFragment.TIME_RESULT_CODE) {
             Date date = (Date) data.getSerializableExtra(TimePickerFragment.EXTRA_TIME);
             mCrime.setDate(date);
             mTimeButton.setText(DateFormat.format("HH:mm", mCrime.getDate()));
         }
-
         if (requestCode == REQUEST_CHOISE) {
             int choise = data.getIntExtra(ChoiceDialogFragment.EXTRA_CHOISE, 0);
             if (choise == 0)
@@ -109,9 +129,45 @@ public class CrimeFragment extends Fragment {
     }
 
     @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        getActivity().getMenuInflater().inflate(R.menu.crime_fragment_command_menu, menu);
+    }
+
+    public boolean backButtonWasPressed() {
+        if (NavUtils.getParentActivityName(getActivity()) != null) {
+            if (mCrime.getTitle() == null) {
+                Toast.makeText(getActivity(), ALERT_MESSAGE_TITLE, Toast.LENGTH_SHORT).show();
+                return false;
+            } else {
+                NavUtils.navigateUpFromSameTask(getActivity());
+            }
+        }
+        return true;
+
+//        if(mCrime.getTitle() == null){
+//            Toast.makeText(getActivity(), ALERT_MESSAGE_TITLE, Toast.LENGTH_SHORT).show();
+//            return false;
+//        }
+//        else{
+//            getActivity().onBackPressed();
+//            return true;
+//        }
+    }
+    @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case android.R.id.home:
+                if (NavUtils.getParentActivityName(getActivity()) != null)
+                    if (mCrime.getTitle() == null) {
+                        Toast.makeText(getActivity(), ALERT_MESSAGE_TITLE, Toast.LENGTH_SHORT).show();
+                        return false;
+                    } else {
+                        NavUtils.navigateUpFromSameTask(getActivity());
+                    }
+                return true;
+            case R.id.command_menu_delete_crimeFragment:
+                CrimeLab crimeLab = CrimeLab.get(getActivity());
+                crimeLab.deleteCrime(mCrime);
                 if (NavUtils.getParentActivityName(getActivity()) != null)
                     NavUtils.navigateUpFromSameTask(getActivity());
                 return true;
@@ -119,7 +175,11 @@ public class CrimeFragment extends Fragment {
                 return super.onOptionsItemSelected(item);
         }
     }
-
+    @Override
+    public void onPause() {
+        super.onPause();
+        CrimeLab.get(getActivity()).saveCrimes();
+    }
     // @Nullable
     @TargetApi(11)
     @Override
@@ -200,6 +260,41 @@ public class CrimeFragment extends Fragment {
             }
         });
 
+        mPhotoButton = (ImageButton) v.findViewById(R.id.crime_imageButton);
+        mPhotoButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(getActivity(), CrimeCameraActivity.class);
+                //startActivity(i);
+                startActivityForResult(i, REQUEST_PHOTO);
+            }
+        });
+
+        mPhotoView = (ImageView)v.findViewById(R.id.crime_imageView);
+
         return v;
+    }
+
+    private void showPhoto(){
+        // Назначение изображения, полученного на основе фотографии
+        Photo photo = mCrime.getPhoto();
+        BitmapDrawable bitmapDrawable = null;
+        if(photo != null){
+            String path = getActivity().getExternalFilesDir(photo.getFileName()).getAbsolutePath();
+            bitmapDrawable = PictureUtils.getScaledDrawable(getActivity(), path);
+        }
+        mPhotoView.setImageDrawable(bitmapDrawable);
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        showPhoto();
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        PictureUtils.cleanImageView(mPhotoView);
     }
 }
