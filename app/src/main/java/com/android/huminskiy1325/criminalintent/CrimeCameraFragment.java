@@ -29,6 +29,7 @@ import android.hardware.camera2.params.StreamConfigurationMap;
 import android.media.Image;
 import android.media.ImageReader;
 import android.os.Bundle;
+import android.os.Environment;
 import android.os.Handler;
 import android.os.HandlerThread;
 import android.support.annotation.NonNull;
@@ -424,6 +425,8 @@ public class CrimeCameraFragment extends Fragment
         super.onActivityCreated(savedInstanceState);
         String fileName = UUID.randomUUID().toString() + ".jpg";
         mFile = new File(getActivity().getExternalFilesDir(null), fileName);
+//        mFile = new File(Environment.getExternalStorageDirectory().getAbsolutePath() +
+//                "/Android/data/com.android.huminskiy1325.criminalintent/", fileName);
 
     }
 
@@ -944,7 +947,6 @@ public class CrimeCameraFragment extends Fragment
                 }
             }
         }
-
     }
 
     /**

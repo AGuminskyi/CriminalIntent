@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.graphics.drawable.BitmapDrawable;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Environment;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -46,15 +47,20 @@ public class CrimeFragment extends Fragment {
     private ImageButton mPhotoButton;
     private ImageView mPhotoView;
 
-    private static final int REQUEST_PHOTO = 3;
     private static final String TAG = "CrimeFragment";
+
     public static final String EXTRA_CRIME_ID = "com.android.huminskiy1325.criminalintent.crime_id";
+
     private static final String DIALOG_DATE = "date";
     private static final String DIALOG_TIME = "time";
+    private static final String DIALOG_IMAGE = "image";
+
     private static final String ALERT_MESSAGE_TITLE = "Please, enter a tittle for the crime";
+
     private static final int REQUEST_DATE = 0;
     private static final int REQUST_TIME = 1;
     private static final int REQUEST_CHOISE = 2;
+    private static final int REQUEST_PHOTO = 3;
 
     private Context context;
 
@@ -93,10 +99,9 @@ public class CrimeFragment extends Fragment {
             Date date = (Date) data.getSerializableExtra(DatePickerFragment.EXTRA_DATE);
             mCrime.setDate(date);
             updateDateOnButton();
-        }
-        else if(requestCode == REQUEST_PHOTO){
+        } else if (requestCode == REQUEST_PHOTO) {
             String fileName = data.getStringExtra(CrimeCameraFragment.EXTRA_PHOTO_FILENAME);
-            if (fileName != null){
+            if (fileName != null) {
                 Photo photo = new Photo(fileName);
                 mCrime.setPhoto(photo);
                 showPhoto();
@@ -153,6 +158,7 @@ public class CrimeFragment extends Fragment {
 //            return true;
 //        }
     }
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
@@ -175,11 +181,13 @@ public class CrimeFragment extends Fragment {
                 return super.onOptionsItemSelected(item);
         }
     }
+
     @Override
     public void onPause() {
         super.onPause();
         CrimeLab.get(getActivity()).saveCrimes();
     }
+
     // @Nullable
     @TargetApi(11)
     @Override
@@ -270,17 +278,36 @@ public class CrimeFragment extends Fragment {
             }
         });
 
-        mPhotoView = (ImageView)v.findViewById(R.id.crime_imageView);
+        mPhotoView = (ImageView) v.findViewById(R.id.crime_imageView);
+        mPhotoView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Photo photo = mCrime.getPhoto();
+                if (photo == null)
+                    return;
+
+                FragmentManager fm = getActivity()
+                        .getSupportFragmentManager();
+//                String path = getActivity()
+//                        .getExternalFilesDir(photo.getFileName()).getAbsolutePath();
+                String path = Environment.getExternalStorageDirectory().getAbsolutePath().toString() +
+                        "/Android/data/com.android.huminskiy1325.criminalintent/files/" + photo.getFileName();
+                ImageFragment.newInstance(path)
+                        .show(fm, DIALOG_IMAGE);
+            }
+        });
 
         return v;
     }
 
-    private void showPhoto(){
+    private void showPhoto() {
         // Назначение изображения, полученного на основе фотографии
         Photo photo = mCrime.getPhoto();
         BitmapDrawable bitmapDrawable = null;
-        if(photo != null){
-            String path = getActivity().getExternalFilesDir(photo.getFileName()).getAbsolutePath();
+        if (photo != null) {
+//            String path = getActivity().getExternalFilesDir(photo.getFileName()).getAbsolutePath();
+            String path = Environment.getExternalStorageDirectory().getAbsolutePath().toString() +
+                    "/Android/data/com.android.huminskiy1325.criminalintent/files/" + photo.getFileName();
             bitmapDrawable = PictureUtils.getScaledDrawable(getActivity(), path);
         }
         mPhotoView.setImageDrawable(bitmapDrawable);
