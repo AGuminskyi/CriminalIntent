@@ -1,14 +1,10 @@
 package com.android.huminskiy1325.criminalintent;
 
 import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Environment;
-import android.support.v4.app.Fragment;
 import android.support.v4.app.ListFragment;
-import android.text.format.DateFormat;
 import android.util.Log;
 import android.view.ActionMode;
 import android.view.ContextMenu;
@@ -27,7 +23,6 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import java.util.ArrayList;
-import java.util.zip.Inflater;
 
 public class CrimeListFragment extends ListFragment {
 
@@ -192,7 +187,6 @@ public class CrimeListFragment extends ListFragment {
             DateTextView.setText(c.getDate().toString());
             CheckBox solvedCheckBox = (CheckBox) convertView.findViewById(R.id.crime_list_item_solvedCheckBox);
             solvedCheckBox.setChecked(c.isSolved());
-
             return convertView;
         }
     }

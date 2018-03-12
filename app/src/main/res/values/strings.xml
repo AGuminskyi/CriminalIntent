@@ -36,7 +36,8 @@
     <string name="crime_suspect_text">Choose Person</string>
     <string name="crime_object_text">Choose Object</string>
     <!--<string name="crime_report_text">Send Crime Report</string>-->
-    <string name="crime_report_text">Send Subject Report</string>
+    <!--<string name="crime_report_text">Send Subject Report</string>-->
+    <string name="crime_report_text">Choose Pair</string>
     <string name="crime_report">%1$s!
     <!--The crime was discovered on %2$s. %3$s, and %4$s</string>-->
     The subject was taken on %2$s. %3$s, and %4$s</string>
@@ -49,4 +50,29 @@
     <!--<string name="send_report">Send crime report via</string>-->
     <string name="send_report">Send report via</string>
     <string name="crime_call_suspect">Call suspect</string>
+
+    <string-array name="objects">
+        <item>Проектор 001</item>
+        <item>Проектор 003</item>
+        <item>Проектор 002</item>
+        <item>Доска 001</item>
+        <item>Доска 002</item>
+        <item>Доска 003</item>
+    </string-array>
+
+    <string-array name="persons">
+        <item>Кублій Лариса Іванівна</item>
+        <item>ПГагарін Олександр Олександрович</item>
+        <item>Аушева Наталія Миколаївна</item>
+        <item>Сліпченко Володимир Георгійович</item>
+        <item>Мамалига Володимир Михайлович</item>
+    </string-array>
+
+    <string-array name="pairs">
+        <item>1</item>
+        <item>2</item>
+        <item>3</item>
+        <item>4</item>
+        <item>5</item>
+    </string-array>
 </resources>

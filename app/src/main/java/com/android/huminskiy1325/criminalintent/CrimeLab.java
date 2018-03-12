@@ -4,8 +4,8 @@ import android.content.Context;
 import android.util.Log;
 import android.widget.Toast;
 
-import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Objects;
 import java.util.UUID;
 
 public class CrimeLab {
@@ -70,5 +70,17 @@ public class CrimeLab {
                 return crime;
 
         return null;
+    }
+
+    public boolean checkSchedulers() {
+        for (int i = 0; i < mCrimes.size(); i++) {
+            for (int j = i + 1; j < mCrimes.size(); j++) {
+                if (mCrimes.get(i).getmPair() == mCrimes.get(j).getmPair() &&
+                        Objects.equals(mCrimes.get(i).getmObject(), mCrimes.get(j).getmObject())) {
+                    return false;
+                }
+            }
+        }
+        return true;
     }
 }

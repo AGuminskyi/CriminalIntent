@@ -8,11 +8,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.DialogFragment;
-import android.view.View;
 
-/**
- * Created by cubru on 07.01.2017.
- */
 
 public class ChoiceDialogFragment extends DialogFragment {
 
