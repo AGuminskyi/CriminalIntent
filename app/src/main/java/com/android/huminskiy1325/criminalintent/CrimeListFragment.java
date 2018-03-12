@@ -29,9 +29,6 @@ import android.widget.TextView;
 import java.util.ArrayList;
 import java.util.zip.Inflater;
 
-/**
- * Created by cubru on 21.07.2016.
- */
 public class CrimeListFragment extends ListFragment {
 
     private ArrayList<Crime> mCrimes;
@@ -39,6 +36,27 @@ public class CrimeListFragment extends ListFragment {
     private static Button mNewCrime;
     private static final int REQUEST_CRIME = 1;
     private static boolean mSubtitleVisible;
+    private Callbacks mCallbacks;
+
+    public interface Callbacks {
+        void onCrimeSelected(Crime crime);
+    }
+
+    @Override
+    public void onAttach(Activity activity) {
+        super.onAttach(activity);
+        mCallbacks = (Callbacks) activity;
+    }
+
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        mCallbacks = null;
+    }
+
+    public void updateUI(){
+        ((CrimeAdapter)getListAdapter()).notifyDataSetChanged();
+    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -91,9 +109,11 @@ public class CrimeListFragment extends ListFragment {
             case R.id.menu_item_new_crime:
                 Crime crime = new Crime();
                 CrimeLab.get(getActivity()).addCrime(crime);
-                Intent intent = new Intent(getActivity(), CrimePagerActivity.class);
-                intent.putExtra(CrimeFragment.EXTRA_CRIME_ID, crime.getID());
-                startActivityForResult(intent, 0);
+//                Intent intent = new Intent(getActivity(), CrimePagerActivity.class);
+//                intent.putExtra(CrimeFragment.EXTRA_CRIME_ID, crime.getID());
+//                startActivityForResult(intent, 0);
+                ((CrimeAdapter) getListAdapter()).notifyDataSetChanged();
+                mCallbacks.onCrimeSelected(crime);
                 return true;
             case R.id.menu_item_show_subtitle:
                 if (getActivity().getActionBar().getSubtitle() == null) {
@@ -201,9 +221,11 @@ public class CrimeListFragment extends ListFragment {
             public void onClick(View v) {
                 Crime crime = new Crime();
                 CrimeLab.get(getActivity()).addCrime(crime);
-                Intent intent = new Intent(getActivity(), CrimePagerActivity.class);
-                intent.putExtra(CrimeFragment.EXTRA_CRIME_ID, crime.getID());
-                startActivityForResult(intent, 0);
+//                Intent intent = new Intent(getActivity(), CrimePagerActivity.class);
+//                intent.putExtra(CrimeFragment.EXTRA_CRIME_ID, crime.getID());
+//                startActivityForResult(intent, 0);
+                ((CrimeAdapter) getListAdapter()).notifyDataSetChanged();
+                mCallbacks.onCrimeSelected(crime);
             }
         });
 
@@ -217,7 +239,7 @@ public class CrimeListFragment extends ListFragment {
             // Контекстные меню для Froyo и Gingerbread
             registerForContextMenu(listView);
         } else {
-                // Контекстная панель действий для Honeycomb и выше
+            // Контекстная панель действий для Honeycomb и выше
             listView.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE_MODAL);
             listView.setMultiChoiceModeListener(new AbsListView.MultiChoiceModeListener() {
                 @Override
@@ -254,12 +276,10 @@ public class CrimeListFragment extends ListFragment {
                         default:
                             return false;
                     }
-
                 }
 
                 @Override
                 public void onDestroyActionMode(ActionMode mode) {
-
                 }
             });
         }

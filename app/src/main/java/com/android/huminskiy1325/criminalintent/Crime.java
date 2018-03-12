@@ -24,25 +24,30 @@ public class Crime {
     private static final String JSON_DATE = "date";
     private static final String JSON_SOLVED = "solved";
     private static final String JSON__FILENAME = "filename";
+    private static final String JSON__SUSPECT = "suspect";
 
     private UUID mID;
     private String mTitle;
+    private String mSuspect;
     private Date mDate;
     private boolean mSolved;
     private Photo mPhoto;
 
-    Crime(){
+    Crime() {
         mID = UUID.randomUUID();
         mDate = new Date();
     }
 
-    public Crime(JSONObject jsonObject) throws  JSONException{
+    public Crime(JSONObject jsonObject) throws JSONException {
         mID = UUID.fromString(jsonObject.getString(JSON_ID));
         mTitle = jsonObject.getString(JSON_TITLE);
         mDate = new Date(jsonObject.getLong(JSON_DATE));
         mSolved = jsonObject.getBoolean(JSON_SOLVED);
-        if(jsonObject.has(JSON__FILENAME)){
+        if (jsonObject.has(JSON__FILENAME)) {
             mPhoto = new Photo(jsonObject);
+        }
+        if (jsonObject.has(JSON__SUSPECT)) {
+            mSuspect = jsonObject.getString(JSON__SUSPECT);
         }
     }
 
@@ -74,25 +79,34 @@ public class Crime {
         mDate = date;
     }
 
-    public JSONObject toJSON() throws JSONException{
+    public JSONObject toJSON() throws JSONException {
         JSONObject jsonObject = new JSONObject();
         jsonObject.put(JSON_ID, mID.toString());
         jsonObject.put(JSON_TITLE, mTitle);
         jsonObject.put(JSON_DATE, mDate.getTime());
         jsonObject.put(JSON_SOLVED, mSolved);
-        if(mPhoto != null){
+        if (mPhoto != null) {
 //            jsonObject.put(JSON_PHOTO, mPhoto.toJSON());
-          jsonObject = mPhoto.toJSON(jsonObject);
+            jsonObject = mPhoto.toJSON(jsonObject);
+            jsonObject.put(JSON__SUSPECT,mSuspect);
         }
         return jsonObject;
     }
 
-    public Photo getPhoto(){
+    public Photo getPhoto() {
         return mPhoto;
     }
 
     public void setPhoto(Photo mPhoto) {
         this.mPhoto = mPhoto;
+    }
+
+    public String getSuspect() {
+        return mSuspect;
+    }
+
+    public void setSuspect(String mSuspect) {
+        this.mSuspect = mSuspect;
     }
 
     @Override

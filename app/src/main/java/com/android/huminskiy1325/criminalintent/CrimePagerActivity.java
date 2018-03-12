@@ -10,7 +10,11 @@ import android.os.Bundle;
 import java.util.ArrayList;
 import java.util.UUID;
 
-public class CrimePagerActivity extends FragmentActivity {
+public class CrimePagerActivity extends FragmentActivity implements CrimeFragment.Callbacks{
+    @Override
+    public void OnCrimeUpdate(Crime crime) {
+
+    }
 
     private ViewPager mViewPager;
     private ArrayList<Crime> mCrimes;
@@ -70,12 +74,11 @@ public class CrimePagerActivity extends FragmentActivity {
                 break;
             }
         }
-
     }
 
     @Override
     public void onBackPressed() {
-        if(crimeFragment.backButtonWasPressed() == true)
+//        if(crimeFragment.backButtonWasPressed() == true)
             super.onBackPressed();
 
     }

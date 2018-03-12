@@ -10,17 +10,21 @@ import android.support.v4.app.FragmentManager;
 public abstract class SingleFragmentActivity extends FragmentActivity {
     protected abstract Fragment createFragment();
 
+    protected int getLayoutResId() {
+        return R.layout.activity_fragment;
+    }
+
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_fragment);
+        //setContentView(R.layout.activity_fragment);
+        setContentView(getLayoutResId());
         FragmentManager fm = getSupportFragmentManager();
         Fragment fragment = fm.findFragmentById(R.id.fragmentContainer);
-        if(fragment == null)
-        {
+        if (fragment == null) {
             fragment = createFragment();
             fm.beginTransaction()
-                    .add(R.id.fragmentContainer,fragment)
+                    .add(R.id.fragmentContainer, fragment)
                     .commit();
         }
 

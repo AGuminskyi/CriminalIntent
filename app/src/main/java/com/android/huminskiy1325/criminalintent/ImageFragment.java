@@ -45,6 +45,6 @@ public class ImageFragment extends DialogFragment {
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        PictureUtils.cleanImageView(mImageView);
+//        PictureUtils.cleanImageView(mImageView);
     }
 }

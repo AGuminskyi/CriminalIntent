@@ -41,12 +41,12 @@ public class PictureUtils {
         return new BitmapDrawable(a.getResources(), bitmap);
     }
 
-    public static void cleanImageView(ImageView imageView){
-        if(!(imageView.getDrawable() instanceof BitmapDrawable))
-            return;
-
-        BitmapDrawable bitmapDrawable = (BitmapDrawable)imageView.getDrawable();
-        bitmapDrawable.getBitmap().recycle();
-        imageView.setImageDrawable(null);
-    }
+//    public static void cleanImageView(ImageView imageView){
+//        if(!(imageView.getDrawable() instanceof BitmapDrawable))
+//            return;
+//
+//        BitmapDrawable bitmapDrawable = (BitmapDrawable)imageView.getDrawable();
+//        bitmapDrawable.getBitmap().recycle();
+//        imageView.setImageDrawable(null);
+//    }
 }

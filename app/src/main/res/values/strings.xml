@@ -1,27 +1,52 @@
 <resources>
 
-    <string name="app_name">CriminalIntent</string>
-    <string name="crime_title_hint">Enter a title for the crime.</string>
+    <!--<string name="app_name">CriminalIntent</string>-->
+    <string name="app_name">OfficeRental</string>
+    <string name="crime_title_hint">Enter a title for the subject.</string>
     <string name="crime_title_label">Title</string>
     <string name="crime_details_label">Details</string>
-    <string name="crime_solved_label">Solved?</string>
-    <string name="crime_title">Crimes</string>
-    <string name="date_picker_title">Date of crime: </string>
-    <string name="time_picker_title">Time of crime: </string>
+    <!--<string name="crime_solved_label">Solved?</string>-->
+    <string name="crime_solved_label">Taked?</string>
+    <!--<string name="crime_title">Crimes</string>-->
+    <string name="crime_title">Subjects</string>
+    <string name="date_picker_title">Date of rental: </string>
+    <string name="time_picker_title">Time of rental: </string>
     <string name="choise_dialog_title">Do you want to edit DATE or TIME?</string>
     <string name="choise_dialog_date">Date</string>
     <string name="choise_dialog_time">Time</string>
 
-    <string name="new_crime">New Crime</string>
+    <!--<string name="new_crime">New Crime</string>-->
+    <string name="new_crime">New Subject</string>
     <string name="show_subtitle">Show Subtitle</string>
     <string name="hide_subtitle">Hide Subtitle</string>
     <string name="subtitle">If u see something, say something.</string>
     <string name="delete_crime">Delete</string>
 
-    <string name="no_crimes">No Crimes</string>
+    <!--<string name="no_crimes">No Crimes</string>-->
+    <string name="no_crimes">No Subjects</string>
     <string name="take">TAKE PHOTO</string>
     <string name="description_info">Info</string>
     <string name="request_permission">This sample needs camera permission.</string>
     <string name="camera_error">This device doesn\'t support Camera2 API.</string>
     <string name="intro_message">Camera info.</string>
+    <string name="delete_image_view">Сделать фотографию с заменой</string>
+    <string name="take_image_view">Сделать фотографию без замены</string>
+
+    <!--<string name="crime_suspect_text">Choose Suspect</string>-->
+    <string name="crime_suspect_text">Choose Person</string>
+    <string name="crime_object_text">Choose Object</string>
+    <!--<string name="crime_report_text">Send Crime Report</string>-->
+    <string name="crime_report_text">Send Subject Report</string>
+    <string name="crime_report">%1$s!
+    <!--The crime was discovered on %2$s. %3$s, and %4$s</string>-->
+    The subject was taken on %2$s. %3$s, and %4$s</string>
+    <string name="crime_report_solved">The case is solved</string>
+    <string name="crime_report_unsolved">The case is not solved</string>
+    <!--<string name="crime_report_no_suspect">There is no suspect.</string>-->
+    <string name="crime_report_no_suspect">There is no suspect.</string>
+    <string name="crime_report_suspect">The suspect is %s.</string>
+    <string name="crime_report_subject">Office Report:</string>
+    <!--<string name="send_report">Send crime report via</string>-->
+    <string name="send_report">Send report via</string>
+    <string name="crime_call_suspect">Call suspect</string>
 </resources>
